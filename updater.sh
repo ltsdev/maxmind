@@ -32,7 +32,6 @@ for db in "${DATABASES[@]}"; do
     filename="GeoLite2-$db.tar.gz"
     
     echo "Downloading GeoLite2 $db database..."
-    echo db
     download "$url" "$DOWNLOAD_DIR/$filename"
 done
 
