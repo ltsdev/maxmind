@@ -5,7 +5,7 @@ set -o nounset
 # Set your MaxMind license key
 LICENSE_KEY=${LICENSE_KEY:-'XXXXXXXXXXXXXX'}
 # Directory to store downloaded files
-DOWNLOAD_DIR=${DOWNLOAD_DIR:-''}
+DOWNLOAD_DIR=${DOWNLOAD_DIR:-'.'}
 # Get the current date
 CURRENT_DATE=$(date +"%d-%m-%Y")
 
