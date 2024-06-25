@@ -27,11 +27,12 @@ download() {
 }
 
 # Loop through databases and download files
-for db in "${!DATABASES[@]}"; do
+for db in "${DATABASES[@]}"; do
     url="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-$db&license_key=$LICENSE_KEY&suffix=tar.gz"
     filename="GeoLite2-$db.tar.gz"
     
     echo "Downloading GeoLite2 $db database..."
+    echo db
     download "$url" "$DOWNLOAD_DIR/$filename"
 done
 
