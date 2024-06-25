@@ -1,4 +1,6 @@
 #!/bin/bash
+# Generate an error if any variable doesn't exist
+set -o nounset
 
 # Set your MaxMind license key
 LICENSE_KEY=${LICENSE_KEY:-'XXXXXXXXXXXXXX'}
