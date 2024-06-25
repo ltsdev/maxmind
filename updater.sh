@@ -9,15 +9,8 @@ DOWNLOAD_DIR=${DOWNLOAD_DIR:-''}
 # Get the current date
 CURRENT_DATE=$(date +"%d-%m-%Y")
 
-# URLs for MaxMind GeoLite2 databases
-CITY_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=$LICENSE_KEY&suffix=tar.gz"
-ASN_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-ASN&license_key=$LICENSE_KEY&suffix=tar.gz"
-COUNTRY_URL="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=$LICENSE_KEY&suffix=tar.gz"
-
-# Filenames for downloaded files
-CITY_FILE="GeoLite2-City.tar.gz"
-ASN_FILE="GeoLite2-ASN.tar.gz"
-COUNTRY_FILE="GeoLite2-Country.tar.gz"
+# Declare the databases name
+DATABASES=('City' 'ASN' 'Country')
 
 # Function to download files
 download() {
@@ -25,20 +18,22 @@ download() {
     local file="$2"
 
     # Download the file
-    curl -o "$file" -L "$url"
+   	if curl -o "$file" -L --fail "$url"; then
+        echo "Downloaded $file successfully."
+    else
+        echo "Failed to download $file from $url. Exiting..."
+        exit 1
+    fi
 }
 
-# Download GeoLite2 City database if update available
-echo "Downloading GeoLite2 City database..."
-download "$CITY_URL" "$DOWNLOAD_DIR/$CITY_FILE"
-
-# Download GeoLite2 ASN database if update available
-echo "Downloading GeoLite2 ASN database..."
-download "$ASN_URL" "$DOWNLOAD_DIR/$ASN_FILE"
-
-# Download GeoLite2 Country database if update available
-echo "Downloading GeoLite2 Country database..."
-download "$COUNTRY_URL" "$DOWNLOAD_DIR/$COUNTRY_FILE"
+# Loop through databases and download files
+for db in "${!DATABASES[@]}"; do
+    url="https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-$db&license_key=$LICENSE_KEY&suffix=tar.gz"
+    filename="GeoLite2-$db.tar.gz"
+    
+    echo "Downloading GeoLite2 $db database..."
+    download "$url" "$DOWNLOAD_DIR/$filename"
+done
 
 echo "MaxMind data update complete."
 
